@@ -1,0 +1,166 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #00796b;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f1f8e9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #00796b;
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #00796b;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #004d40;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+li {
+    background: #e0f2f1;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    position: relative;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+li:hover {
+    transform: scale(1.02);
+}
+
+.sender {
+    font-weight: bold;
+    color: #004d40;
+    text-transform: uppercase;
+}
+
+.receiver {
+    font-weight: bold;
+    color: #00796b;
+    text-transform: uppercase;
+}
+
+.message-content {
+    color: #555;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.timestamp {
+    font-size: 11px;
+    color: #777;
+    align-self: flex-end;
+    margin-top: 5px;
+}
+
+.chat-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 5px;
+    align-items: center;
+}
+
+.edit-btn, .delete-btn {
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.edit-btn {
+    background: #ffb74d;
+}
+
+.edit-btn:hover {
+    background: #f57c00;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    margin-left: 5px;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+    }
+    
+    li {
+        font-size: 13px;
+    }
+
+    input, button {
+        font-size: 14px;
+    }
+}

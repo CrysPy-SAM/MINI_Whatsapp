@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat List</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Chat Messages</h1>
+        
+        <form id="chatForm">
+            <input type="text" id="from" placeholder="Your Name" required>
+            <input type="text" id="to" placeholder="Receiver's Name" required>
+            <input type="text" id="message" placeholder="Type a message" required>
+            <button type="submit">Send</button>
+        </form>
+
+        <ul id="chatList">
+            <% chats.forEach(chat => { %>
+                <li data-id="<%= chat._id %>">
+                    <div class="chat-actions">
+                        <span class="sender"><%= chat.from %></span> ➝ <span class="receiver"><%= chat.to %></span>
+                        <button class="edit-btn">✏ Edit</button>
+                        <button class="delete-btn">🗑 Delete</button>
+                    </div>
+                    <span class="message-content"><%= chat.message %></span>
+                    <span class="timestamp"><%= new Date(chat.created_at).toLocaleString() %></span>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById("chatForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const from = document.getElementById("from").value;
+            const to = document.getElementById("to").value;
+            const message = document.getElementById("message").value;
+
+            const response = await fetch("/add-chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ from, to, message })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                const chatList = document.getElementById("chatList");
+                const newChat = document.createElement("li");
+                newChat.setAttribute("data-id", data.chat._id);
+                newChat.innerHTML = `
+                    <div class="chat-actions">
+                        <span class="sender">${data.chat.from}</span> ➝ <span class="receiver">${data.chat.to}</span>
+                        <button class="edit-btn">✏ Edit</button>
+                        <button class="delete-btn">🗑 Delete</button>
+                    </div>
+                    <span class="message-content">${data.chat.message}</span>
+                    <span class="timestamp">${new Date(data.chat.created_at).toLocaleString()}</span>
+                `;
+                chatList.prepend(newChat);
+                document.getElementById("chatForm").reset();
+            }
+        });
+
+        document.getElementById("chatList").addEventListener("click", async function(event) {
+            if (event.target.classList.contains("edit-btn")) {
+                const li = event.target.closest("li");
+                const chatId = li.getAttribute("data-id");
+                const chatMessage = li.querySelector(".message-content");
+
+                const newMessage = prompt("Edit your message:", chatMessage.textContent);
+                if (newMessage !== null) {
+                    const response = await fetch(`/edit-chat/${chatId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message: newMessage })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        chatMessage.textContent = data.chat.message;
+                    }
+                }
+            }
+
+            if (event.target.classList.contains("delete-btn")) {
+                const li = event.target.closest("li");
+                const chatId = li.getAttribute("data-id");
+
+                const confirmDelete = confirm("Are you sure you want to delete this chat?");
+                if (confirmDelete) {
+                    const response = await fetch(`/delete-chat/${chatId}`, {
+                        method: "DELETE"
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        li.remove();
+                    } else {
+                        alert("Failed to delete chat.");
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
